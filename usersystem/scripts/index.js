@@ -2,25 +2,25 @@
 		$remove = $('#remove');
 
 	$table.bootstrapTable({
-		// ajax: function (request) {
-		// 	$.ajax({
-		// 		type: "GET",
-		// 		url:"",
-		// 		contentType: "application/json;charset=utf-8",
-		// 		dataType: "jsonp",
-		// 		data: '',
-		// 		jsonp: 'callback',
-		// 		success: function(msg) {
-		// 			request.success({
-		// 				row: msg
-		// 			});
-		// 			$table.bootstrapTable('load',msg);
-		// 		},
-		// 		error: function(){
-		// 			alert("请求失败");
-		// 		}
-		// 	});
-		// },
+		ajax: function (request) {
+			$.ajax({
+				type: "GET",
+				url:"http://222.31.67.167:82/api/Admin",
+				contentType: "application/json;charset=utf-8",
+				dataType: "jsonp",
+				data: '',
+				jsonp: 'callback',
+				success: function(msg) {
+					request.success({
+						row: msg
+					});
+					$table.bootstrapTable('load',msg);
+				},
+				error: function(){
+					alert("请求失败");
+				}
+			});
+		},
 		// url:'data1.json',
 		cache: false,  //设置为false，禁用ajax数据缓存，默认为true
 		method: 'get',
@@ -88,7 +88,7 @@
 				// events: operateEvents
 			}, 
 		],
-		data: [
+		/*data: [
 			{
 				"user_name": 0,
 				"user_sex": "男",
@@ -153,7 +153,7 @@
 				"user_xueyuan": "计算机学院",
 				"user_profession": "什么都学"
 			}
-		],
+		],*/
 		onLoadSuccess: function(){
 			console.info("加载成功");
 		},
@@ -216,7 +216,7 @@
 		},
 	};
 
-	// 删除
+	// 删除操作
 	function deleteUser(ids) {
 		var msg = "您真的确定要删除吗？";
 		if (confirm(msg) == true) {
@@ -230,12 +230,16 @@
 					alert(data.msg);
 
 					//重新加载数据
-					$table.bootstrapTable('refresh',{url: ''});  //加载数据的api
+					$table.bootstrapTable('refresh',{url: ""});  //加载数据的api
 				}
 			});
 		}
 	}
 	// 批量删除
+	$('#remove').click(function() {
+		deleteUserList();
+	});
+
 	function deleteUserList() {
 		var rows = $table.bootstrapTable('getSelections');
 		if( rows.length == 0 ) {
@@ -244,7 +248,7 @@
 		}
 		var ids = '';
 		for (var i = 0; i < rows.length; i++) {
-			ids += rows[i].user_id + ",";
+			ids += rows[i][user_id] + ",";
 		}
 		ids = ids.substring(0, ids.length-1);
 		deleteUser(ids);
